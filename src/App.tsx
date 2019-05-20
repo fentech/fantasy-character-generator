@@ -1,29 +1,42 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import { GeneratorForm } from "./components/GeneratorForm";
 
 interface Props {}
 
-interface State {}
+interface State {
+  race: string;
+  cclass: string;
+}
 
 class App extends React.Component<Props, State> {
+  state = {
+    race: "dwarf",
+    cclass: "paladin"
+  };
+
+  handleSelectChange: SelectChangeHandler = ({ target: { value, id } }) => {
+    if (id === "cclass") {
+      this.setState({ cclass: value });
+    } else if (id === "race") {
+      this.setState({ race: value });
+    }
+  };
+
+  handleFormSubmit: FormSubmitHandler = event => {
+    event.preventDefault();
+    console.log({ state: this.state, event });
+  };
+
   render() {
+    const { race, cclass } = this.state;
+    const fieldValues = { race, cclass };
     return (
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>poop</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <GeneratorForm
+        fieldValues={fieldValues}
+        onChange={this.handleSelectChange}
+        onSubmit={this.handleFormSubmit}
+      />
     );
   }
 }
